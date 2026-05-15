@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="ru">
 <head>
@@ -10,108 +9,175 @@
             --primary: #2ecc71;
             --dark: #1a1a1a;
             --light: #f4f4f4;
-            --accent: #27ae60;
+            --transition: all 0.5s cubic-bezier(0.25, 0.8, 0.25, 1);
         }
+
         * { box-sizing: border-box; margin: 0; padding: 0; }
+        
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             line-height: 1.6;
             color: #333;
             background-color: var(--light);
+            overflow-x: hidden;
         }
+
         header {
-            background: var(--dark);
+            background: linear-gradient(135deg, #1a1a1a 0%, #0a0a0a 100%);
             color: #fff;
             padding: 100px 20px;
             text-align: center;
         }
+
         .container { max-width: 1000px; margin: 0 auto; padding: 40px 20px; }
-        h1 { font-size: 3.5rem; margin-bottom: 10px; color: var(--primary); }
-        .tagline { font-size: 1.5rem; opacity: 0.9; margin-bottom: 30px; }
-        
+
+        h1 { font-size: 3.5rem; color: var(--primary); margin-bottom: 10px; }
+
+        /* Класс для анимации появления */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: var(--transition);
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
         .section { margin-bottom: 60px; }
         .section h2 { font-size: 2rem; margin-bottom: 20px; border-left: 5px solid var(--primary); padding-left: 15px; }
         
         .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
-        .card { background: #fff; padding: 30px; border-radius: 15px; shadow: 0 4px 6px rgba(0,0,0,0.1); border-bottom: 4px solid var(--primary); }
-        .card h3 { margin-bottom: 15px; color: var(--dark); }
-        
+
+        .card { 
+            background: #fff; 
+            padding: 30px; 
+            border-radius: 20px; 
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            transition: var(--transition);
+        }
+
+        /* На компах — эффект при наведении */
+        @media (hover: hover) {
+            .card:hover {
+                transform: translateY(-10px);
+                box-shadow: 0 15px 30px rgba(46, 204, 113, 0.2);
+            }
+        }
+
+        /* На телефонах — чуть увеличиваем при клике */
+        @media (hover: none) {
+            .card:active {
+                transform: scale(0.98);
+            }
+        }
+
         .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; text-align: center; }
-        .stat-item { padding: 20px; }
         .stat-number { font-size: 2.5rem; font-weight: bold; color: var(--primary); display: block; }
-        .stat-label { font-size: 1rem; color: #666; text-transform: uppercase; }
 
-        .cta-box { background: var(--dark); color: #fff; padding: 50px; border-radius: 20px; text-align: center; }
-        .email-link { color: var(--primary); font-size: 1.8rem; text-decoration: none; font-weight: bold; }
-        .email-link:hover { text-decoration: underline; }
-
-        footer { text-align: center; padding: 40px; font-size: 0.9rem; color: #888; }
+        .cta-box { background: var(--dark); color: #fff; padding: 40px; border-radius: 20px; text-align: center; }
         
+        .email-link { 
+            display: inline-block;
+            color: var(--primary); 
+            font-size: 1.5rem; 
+            text-decoration: none; 
+            font-weight: bold; 
+            margin-top: 15px;
+            padding: 10px 25px;
+            border: 2px solid var(--primary);
+            border-radius: 50px;
+            transition: var(--transition);
+        }
+
+        .email-link:hover { background: var(--primary); color: #000; }
+
+        footer { text-align: center; padding: 40px; color: #888; font-size: 0.9rem; }
+
         @media (max-width: 600px) {
             h1 { font-size: 2.5rem; }
-            .tagline { font-size: 1.2rem; }
         }
     </style>
 </head>
 <body>
 
 <header>
-    <h1>SmartGorshok</h1>
-    <p class="tagline">Твои растения больше не погибнут. Никогда.</p>
+    <h1 class="reveal">SmartGorshok</h1>
+    <p class="tagline reveal">Твои растения под надежной защитой</p>
 </header>
 
 <div class="container">
-    <section class="section">
+    <section class="section reveal">
         <h2>О проекте</h2>
-        <p>SmartGorshok — это умная экосистема для дома и офиса. Мы создали автономный модуль, который контролирует полив, освещение и микроклимат без вашего участия. Идеально для тех, кто часто бывает в командировках или просто забывает полить свой любимый фикус.</p>
+        <p>SmartGorshok — это умная система автоматизированного мониторинга. Мы объединили датчики влажности, UV-контроль и Wi-Fi, чтобы вы могли быть спокойны за свои растения, где бы вы ни находились.</p>
     </section>
 
-    <section class="section">
-        <h2>Что внутри?</h2>
+    <section class="section reveal">
+        <h2>Технологии</h2>
         <div class="grid">
             <div class="card">
-                <h3>Умный полив</h3>
-                <p>Интеллектуальное управление насосом на основе реальной влажности почвы. Никакого перелива.</p>
+                <h3>💧 Полив</h3>
+                <p>Точная подача воды на основе данных о влажности почвы. Никакого гниения корней.</p>
             </div>
             <div class="card">
-                <h3>UV-Контроль</h3>
-                <p>Адаптивное освещение, которое подстраивается под тип вашего растения.</p>
+                <h3>☀️ Свет</h3>
+                <p>Адаптивное UV-освещение, имитирующее солнечный спектр для здоровья листьев.</p>
             </div>
             <div class="card">
-                <h3>Wi-Fi Мониторинг</h3>
-                <p>Следите за состоянием цветов через смартфон из любой точки мира.</p>
+                <h3>🌐 Облако</h3>
+                <p>Удаленный доступ к показателям и истории через ваш смартфон.</p>
             </div>
         </div>
     </section>
 
-    <section class="section">
-        <h2>Бизнес-метрики</h2>
+    <section class="section reveal">
+        <h2>Бизнес</h2>
         <div class="stats-grid">
             <div class="stat-item">
                 <span class="stat-number">43%</span>
                 <span class="stat-label">Рентабельность</span>
             </div>
             <div class="stat-item">
-                <span class="stat-number">12 000 ₽</span>
-                <span class="stat-label">Цена устройства</span>
+                <span class="stat-number">12к ₽</span>
+                <span class="stat-label">Цена</span>
             </div>
             <div class="stat-item">
-                <span class="stat-number">17.8 Млн ₽</span>
-                <span class="stat-label">Выручка (прогноз год)</span>
+                <span class="stat-number">17.8М</span>
+                <span class="stat-label">Выручка/год</span>
             </div>
         </div>
     </section>
 
-    <section class="section cta-box">
-        <h2 style="color: #fff; border: none; text-align: center;">Связаться с нами</h2>
-        <p style="margin-bottom: 20px;">По вопросам сотрудничества и инвестиций пишите на почту:</p>
+    <section class="section cta-box reveal">
+        <h2>Связаться</h2>
+        <p>По вопросам сотрудничества и инвестиций:</p>
         <a href="mailto:smartgorshok@gmail.com" class="email-link">smartgorshok@gmail.com</a>
     </section>
 </div>
 
 <footer>
-    &copy; 2026 SmartGorshok Project. Работает на GitHub Pages.
+    &copy; 2026 SmartGorshok. Сделано для питча.
 </footer>
+
+<script>
+    // Скрипт для анимации появления при скролле
+    function reveal() {
+        var reveals = document.querySelectorAll(".reveal");
+        for (var i = 0; i < reveals.length; i++) {
+            var windowHeight = window.innerHeight;
+            var elementTop = reveals[i].getBoundingClientRect().top;
+            var elementVisible = 100;
+            if (elementTop < windowHeight - elementVisible) {
+                reveals[i].classList.add("active");
+            }
+        }
+    }
+
+    window.addEventListener("scroll", reveal);
+    // Запускаем один раз при загрузке, чтобы первый экран сразу ожил
+    reveal();
+</script>
 
 </body>
 </html>
