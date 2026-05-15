@@ -21,6 +21,23 @@
       --container-width: 1200px;
     }
 
+    /* --- УБИРАЕМ СИНЕЕ ВЫДЕЛЕНИЕ --- */
+    * { 
+      box-sizing: border-box; 
+      margin: 0; 
+      padding: 0; 
+      -webkit-tap-highlight-color: transparent; /* Убирает синий квадрат на iOS/Android */
+    }
+
+    /* --- АНИМАЦИЯ НАЖАТИЯ --- */
+    .sg-card, .stat-card, .email-btn {
+      transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1), background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .tap-active {
+      transform: scale(0.96) !important; /* Плавное уменьшение */
+    }
+
     @keyframes shimmer {
       0% { background-position: -200% center; }
       100% { background-position: 200% center; }
@@ -47,8 +64,6 @@
       color: var(--accent-green);
       margin-left: 4px;
     }
-
-    * { box-sizing: border-box; margin: 0; padding: 0; }
 
     body {
       background-color: var(--bg-dark);
@@ -126,14 +141,10 @@
 
     .sg-card, .stat-card {
       cursor: pointer;
-    }
-
-    .sg-card {
       background: var(--bg-card);
       border: 1px solid var(--border-color);
       border-radius: 24px;
       padding: 32px;
-      transition: all 0.3s ease;
     }
 
     @media (min-width: 1024px) {
@@ -158,12 +169,9 @@
     }
 
     .stat-card {
-      background: var(--bg-card);
       border-radius: 20px;
       padding: 30px;
       text-align: center;
-      border: 1px solid var(--border-color);
-      transition: 0.3s;
     }
 
     .stat-card:hover {
@@ -197,7 +205,6 @@
       font-weight: 700;
       text-decoration: none;
       margin-top: 30px;
-      transition: 0.3s;
     }
 
     .modal-overlay {
@@ -303,17 +310,17 @@
   <section>
     <div class="sg-section-title"><i data-lucide="binary"></i> Functional</div>
     <div class="sg-grid">
-      <div class="sg-card" onclick="openModal('irrigation')">
+      <div class="sg-card" data-modal="irrigation">
         <i data-lucide="droplet" class="card-icon-wrap"></i>
         <h3>Smart Irrigation</h3>
         <p style="color: var(--text-muted)">Анализ влажности в реальном времени. Полив происходит только при необходимости.</p>
       </div>
-      <div class="sg-card" onclick="openModal('photo')">
+      <div class="sg-card" data-modal="photo">
         <i data-lucide="sun" class="card-icon-wrap"></i>
         <h3>Photosynthesis Lab</h3>
         <p style="color: var(--text-muted)">Автоматическое управление спектром освещения для ускорения роста.</p>
       </div>
-      <div class="sg-card" onclick="openModal('mobile')">
+      <div class="sg-card" data-modal="mobile">
         <i data-lucide="smartphone" class="card-icon-wrap"></i>
         <h3>Mobile Control</h3>
         <p style="color: var(--text-muted)">Приложение со всеми показателями и мгновенными Push-уведомлениями о состоянии растений.</p>
@@ -324,15 +331,15 @@
   <section>
     <div class="sg-section-title"><i data-lucide="trending-up"></i> Business Case</div>
     <div class="stats-row">
-      <div class="stat-card" onclick="openModal('roi')">
+      <div class="stat-card" data-modal="roi">
         <div class="stat-number">43%</div>
         <div class="stat-label">ROI</div>
       </div>
-      <div class="stat-card" onclick="openModal('cost')">
+      <div class="stat-card" data-modal="cost">
         <div class="stat-number">12k</div>
         <div class="stat-label">Cost</div>
       </div>
-      <div class="stat-card" onclick="openModal('market')">
+      <div class="stat-card" data-modal="market">
         <div class="stat-number">17.8M</div>
         <div class="stat-label">Market</div>
       </div>
@@ -352,9 +359,9 @@
   </footer>
 </div>
 
-<div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)">
-  <div class="modal-content" onclick="event.stopPropagation()">
-    <button class="close-modal" onclick="closeModal()"><i data-lucide="x"></i></button>
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal-content">
+    <button class="close-modal" id="closeBtn"><i data-lucide="x"></i></button>
     <div id="modalBody" class="modal-body"></div>
   </div>
 </div>
@@ -362,6 +369,7 @@
 <script>
   lucide.createIcons();
 
+  // Логика печати
   async function typeWriter(el, speed) {
     const text = el.getAttribute('data-text');
     el.innerText = '';
@@ -379,7 +387,6 @@
   window.addEventListener('DOMContentLoaded', async () => {
     const title = document.getElementById('type-title');
     const tagline = document.getElementById('type-tagline');
-
     await typeWriter(title, 100);
     await new Promise(res => setTimeout(res, 400));
     await typeWriter(tagline, 35);
@@ -418,26 +425,48 @@
     }
   };
 
+  const overlay = document.getElementById('modalOverlay');
+  const body = document.getElementById('modalBody');
+
   function openModal(id) {
     const data = modalData[id];
-    const body = document.getElementById('modalBody');
     body.innerHTML = `
       <h2>${data.title}</h2>
       <p style="color: var(--text-muted)">${data.content}</p>
-      <div class="modal-detail-row">
-        ${data.details}
-      </div>
+      <div class="modal-detail-row">${data.details}</div>
     `;
-    
-    document.getElementById('modalOverlay').classList.add('active');
+    overlay.classList.add('active');
     document.body.classList.add('modal-open');
     lucide.createIcons();
   }
 
-  function closeModal(e) {
-    document.getElementById('modalOverlay').classList.remove('active');
+  function closeModal() {
+    overlay.classList.remove('active');
     document.body.classList.remove('modal-open');
   }
+
+  // --- ОБРАБОТКА ТАПОВ (УМЕНЬШЕНИЕ) ---
+  const clickables = document.querySelectorAll('.sg-card, .stat-card, .email-btn');
+
+  clickables.forEach(el => {
+    // Начало нажатия
+    const startEffect = () => el.classList.add('tap-active');
+    // Конец нажатия
+    const endEffect = () => {
+      el.classList.remove('tap-active');
+      const modalId = el.getAttribute('data-modal');
+      if (modalId) openModal(modalId);
+    };
+
+    el.addEventListener('touchstart', startEffect, {passive: true});
+    el.addEventListener('touchend', endEffect);
+    el.addEventListener('mousedown', startEffect);
+    el.addEventListener('mouseup', endEffect);
+    el.addEventListener('mouseleave', () => el.classList.remove('tap-active'));
+  });
+
+  document.getElementById('closeBtn').addEventListener('click', closeModal);
+  overlay.addEventListener('click', (e) => { if(e.target === overlay) closeModal(); });
 </script>
 
 </body>
