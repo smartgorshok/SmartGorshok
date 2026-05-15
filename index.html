@@ -1,183 +1,287 @@
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SmartGorshok — Твои растения под защитой</title>
-    <style>
-        :root {
-            --primary: #2ecc71;
-            --dark: #1a1a1a;
-            --light: #f4f4f4;
-            --transition: all 0.5s cubic-bezier(0.25, 0.8, 0.25, 1);
-        }
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@inter-var/latin@1.0.0/index.css">
+<script src="https://unpkg.com/lucide@latest"></script>
 
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-        
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            line-height: 1.6;
-            color: #333;
-            background-color: var(--light);
-            overflow-x: hidden;
-        }
+<style>
+  :root {
+    --bg-dark: #0f172a;
+    --bg-card: #1e293b;
+    --accent-primary: #2ecc71;
+    --accent-glow: rgba(46, 204, 113, 0.3);
+    --text-main: #f8fafc;
+    --text-muted: #94a3b8;
+    --border-color: #334155;
+    --font-sans: 'Inter', -apple-system, sans-serif;
+  }
 
-        header {
-            background: linear-gradient(135deg, #1a1a1a 0%, #0a0a0a 100%);
-            color: #fff;
-            padding: 100px 20px;
-            text-align: center;
-        }
+  @keyframes shimmer {
+    0% { background-position: -200% center; }
+    100% { background-position: 200% center; }
+  }
 
-        .container { max-width: 1000px; margin: 0 auto; padding: 40px 20px; }
+  @keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+  }
 
-        h1 { font-size: 3.5rem; color: var(--primary); margin-bottom: 10px; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
 
-        /* Класс для анимации появления */
-        .reveal {
-            opacity: 0;
-            transform: translateY(30px);
-            transition: var(--transition);
-        }
+  .sg-wrap {
+    font-family: var(--font-sans);
+    color: var(--text-main);
+    background-color: var(--bg-dark);
+    width: 100%;
+    padding: 20px;
+    overflow: hidden;
+  }
 
-        .reveal.active {
-            opacity: 1;
-            transform: translateY(0);
-        }
+  /* Hero Section */
+  .sg-hero {
+    background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%);
+    border-radius: 24px;
+    padding: 60px 20px;
+    text-align: center;
+    margin-bottom: 32px;
+    border: 1px solid var(--border-color);
+    position: relative;
+  }
 
-        .section { margin-bottom: 60px; }
-        .section h2 { font-size: 2rem; margin-bottom: 20px; border-left: 5px solid var(--primary); padding-left: 15px; }
-        
-        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
+  .hero-icon-wrap {
+    color: var(--accent-primary);
+    margin-bottom: 20px;
+    display: inline-block;
+    animation: float 4s ease-in-out infinite;
+  }
 
-        .card { 
-            background: #fff; 
-            padding: 30px; 
-            border-radius: 20px; 
-            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-            transition: var(--transition);
-        }
+  .sg-title {
+    font-size: 48px;
+    font-weight: 800;
+    letter-spacing: -1.5px;
+    background: linear-gradient(135deg, #2ecc71, #5de09a, #1abc9c);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: shimmer 4s linear infinite;
+    background-size: 200% auto;
+  }
 
-        /* На компах — эффект при наведении */
-        @media (hover: hover) {
-            .card:hover {
-                transform: translateY(-10px);
-                box-shadow: 0 15px 30px rgba(46, 204, 113, 0.2);
-            }
-        }
+  .sg-tagline {
+    font-size: 18px;
+    color: var(--text-muted);
+    margin-top: 12px;
+  }
 
-        /* На телефонах — чуть увеличиваем при клике */
-        @media (hover: none) {
-            .card:active {
-                transform: scale(0.98);
-            }
-        }
+  /* Badges */
+  .sg-badges {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    margin-top: 24px;
+    flex-wrap: wrap;
+  }
 
-        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; text-align: center; }
-        .stat-number { font-size: 2.5rem; font-weight: bold; color: var(--primary); display: block; }
+  .badge {
+    font-size: 13px;
+    padding: 6px 14px;
+    border-radius: 100px;
+    background: rgba(46, 204, 113, 0.1);
+    border: 1px solid rgba(46, 204, 113, 0.2);
+    color: var(--accent-primary);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
 
-        .cta-box { background: var(--dark); color: #fff; padding: 40px; border-radius: 20px; text-align: center; }
-        
-        .email-link { 
-            display: inline-block;
-            color: var(--primary); 
-            font-size: 1.5rem; 
-            text-decoration: none; 
-            font-weight: bold; 
-            margin-top: 15px;
-            padding: 10px 25px;
-            border: 2px solid var(--primary);
-            border-radius: 50px;
-            transition: var(--transition);
-        }
+  /* Grid & Cards */
+  .sg-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 16px;
+    margin-top: 20px;
+  }
 
-        .email-link:hover { background: var(--primary); color: #000; }
+  .sg-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 20px;
+    padding: 24px;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  }
 
-        footer { text-align: center; padding: 40px; color: #888; font-size: 0.9rem; }
+  /* Анимация при наведении (компьютеры) */
+  @media (hover: hover) {
+    .sg-card:hover {
+      transform: translateY(-8px) scale(1.02);
+      border-color: var(--accent-primary);
+      box-shadow: 0 10px 30px var(--accent-glow);
+    }
+    
+    .sg-card:hover .card-icon-wrap {
+      color: var(--text-main);
+      transform: rotate(10deg);
+    }
+  }
 
-        @media (max-width: 600px) {
-            h1 { font-size: 2.5rem; }
-        }
-    </style>
-</head>
-<body>
+  .card-icon-wrap {
+    color: var(--accent-primary);
+    margin-bottom: 16px;
+    transition: all 0.3s ease;
+    display: block;
+  }
 
-<header>
-    <h1 class="reveal">SmartGorshok</h1>
-    <p class="tagline reveal">Твои растения под надежной защитой</p>
-</header>
+  .card-title {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 8px;
+  }
 
-<div class="container">
-    <section class="section reveal">
-        <h2>О проекте</h2>
-        <p>SmartGorshok — это умная система автоматизированного мониторинга. Мы объединили датчики влажности, UV-контроль и Wi-Fi, чтобы вы могли быть спокойны за свои растения, где бы вы ни находились.</p>
-    </section>
+  .card-body {
+    font-size: 14px;
+    color: var(--text-muted);
+    line-height: 1.6;
+  }
 
-    <section class="section reveal">
-        <h2>Технологии</h2>
-        <div class="grid">
-            <div class="card">
-                <h3>💧 Полив</h3>
-                <p>Точная подача воды на основе данных о влажности почвы. Никакого гниения корней.</p>
-            </div>
-            <div class="card">
-                <h3>☀️ Свет</h3>
-                <p>Адаптивное UV-освещение, имитирующее солнечный спектр для здоровья листьев.</p>
-            </div>
-            <div class="card">
-                <h3>🌐 Облако</h3>
-                <p>Удаленный доступ к показателям и истории через ваш смартфон.</p>
-            </div>
-        </div>
-    </section>
+  /* Stats */
+  .stats-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 16px;
+  }
 
-    <section class="section reveal">
-        <h2>Бизнес</h2>
-        <div class="stats-grid">
-            <div class="stat-item">
-                <span class="stat-number">43%</span>
-                <span class="stat-label">Рентабельность</span>
-            </div>
-            <div class="stat-item">
-                <span class="stat-number">12к ₽</span>
-                <span class="stat-label">Цена</span>
-            </div>
-            <div class="stat-item">
-                <span class="stat-number">17.8М</span>
-                <span class="stat-label">Выручка/год</span>
-            </div>
-        </div>
-    </section>
+  .stat-card {
+    background: rgba(30, 41, 59, 0.5);
+    border-radius: 16px;
+    padding: 24px;
+    text-align: center;
+    border: 1px solid var(--border-color);
+  }
 
-    <section class="section cta-box reveal">
-        <h2>Связаться</h2>
-        <p>По вопросам сотрудничества и инвестиций:</p>
-        <a href="mailto:smartgorshok@gmail.com" class="email-link">smartgorshok@gmail.com</a>
-    </section>
+  .stat-number {
+    font-size: 32px;
+    font-weight: 700;
+    color: var(--accent-primary);
+    display: block;
+  }
+
+  /* Timeline */
+  .timeline { margin-top: 20px; }
+  .tl-item { display: flex; gap: 20px; padding-bottom: 30px; }
+  .tl-dot {
+    width: 32px; height: 32px; border-radius: 50%;
+    background: var(--accent-primary);
+    color: var(--bg-dark);
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 800; flex-shrink: 0;
+  }
+  .tl-content { padding-top: 4px; }
+  .tl-title { font-weight: 600; font-size: 16px; margin-bottom: 4px; }
+  .tl-desc { color: var(--text-muted); font-size: 14px; }
+
+  /* CTA */
+  .cta-box {
+    background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+    border: 1px solid var(--accent-primary);
+    border-radius: 24px;
+    padding: 40px;
+    text-align: center;
+    margin-top: 40px;
+    box-shadow: 0 0 20px var(--accent-glow);
+  }
+
+  .email-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--accent-primary);
+    color: var(--bg-dark);
+    padding: 14px 32px;
+    border-radius: 12px;
+    font-weight: 700;
+    text-decoration: none;
+    transition: 0.3s;
+    margin-top: 20px;
+  }
+
+  .email-btn:hover {
+    transform: scale(1.05);
+    filter: brightness(1.1);
+  }
+
+  .sg-section-title {
+    font-size: 20px;
+    font-weight: 600;
+    margin: 40px 0 20px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  
+  .sg-section-title i { color: var(--accent-primary); }
+</style>
+
+<div class="sg-wrap">
+  <div class="sg-hero">
+    <div class="hero-icon-wrap"><i data-lucide="sprout" size="64"></i></div>
+    <div class="sg-title">SmartGorshok</div>
+    <div class="sg-tagline">Профессиональная инженерия для домашних растений</div>
+    <div class="sg-badges">
+      <span class="badge"><i data-lucide="activity" size="16"></i> Live мониторинг</span>
+      <span class="badge"><i data-lucide="wifi" size="16"></i> ESP32 Powered</span>
+      <span class="badge"><i data-lucide="database" size="16"></i> Cloud Data</span>
+    </div>
+  </div>
+
+  <div class="sg-section">
+    <div class="sg-section-title"><i data-lucide="cpu"></i> Технологии</div>
+    <div class="sg-grid">
+      <div class="sg-card">
+        <i data-lucide="droplets" class="card-icon-wrap" size="32"></i>
+        <div class="card-title">Умный полив</div>
+        <div class="card-body">Точная подача воды на базе датчиков влажности. Забудьте о переливе.</div>
+      </div>
+      <div class="sg-card">
+        <i data-lucide="sun" class="card-icon-wrap" size="32"></i>
+        <div class="card-title">Авто-свет</div>
+        <div class="card-body">UV-спектр, который включается только тогда, когда растению это нужно.</div>
+      </div>
+      <div class="sg-card">
+        <i data-lucide="smartphone" class="card-icon-wrap" size="32"></i>
+        <div class="card-title">Контроль 24/7</div>
+        <div class="card-body">Полная статистика в мобильном приложении через Wi-Fi.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sg-section">
+    <div class="sg-section-title"><i data-lucide="bar-chart-3"></i> Экономика проекта</div>
+    <div class="stats-row">
+      <div class="stat-card">
+        <span class="stat-number">43%</span>
+        <span class="stat-label">Рентабельность</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-number">12к ₽</span>
+        <span class="stat-label">Себестоимость</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-number">17.8М</span>
+        <span class="stat-label">Цель выручки/год</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="cta-box">
+    <h3>Готовы масштабировать?</h3>
+    <p style="color: var(--text-muted); margin-top: 8px;">Свяжитесь с разработчиком для получения pitch deck</p>
+    <a href="mailto:smartgorshok@gmail.com" class="email-btn">
+      <i data-lucide="mail"></i> Написать нам
+    </a>
+  </div>
+
+  <div style="text-align: center; color: var(--text-muted); font-size: 12px; margin-top: 40px; padding-bottom: 20px;">
+    © 2026 SmartGorshok — Developed by 7th Grade Engineer
+  </div>
 </div>
 
-<footer>
-    &copy; 2026 SmartGorshok. Сделано для питча.
-</footer>
-
 <script>
-    // Скрипт для анимации появления при скролле
-    function reveal() {
-        var reveals = document.querySelectorAll(".reveal");
-        for (var i = 0; i < reveals.length; i++) {
-            var windowHeight = window.innerHeight;
-            var elementTop = reveals[i].getBoundingClientRect().top;
-            var elementVisible = 100;
-            if (elementTop < windowHeight - elementVisible) {
-                reveals[i].classList.add("active");
-            }
-        }
-    }
-
-    window.addEventListener("scroll", reveal);
-    // Запускаем один раз при загрузке, чтобы первый экран сразу ожил
-    reveal();
+  // Инициализация иконок Lucide
+  lucide.createIcons();
 </script>
-
-</body>
-</html>
