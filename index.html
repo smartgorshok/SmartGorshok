@@ -1,0 +1,117 @@
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SmartGorshok — Твои растения под защитой</title>
+    <style>
+        :root {
+            --primary: #2ecc71;
+            --dark: #1a1a1a;
+            --light: #f4f4f4;
+            --accent: #27ae60;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: var(--light);
+        }
+        header {
+            background: var(--dark);
+            color: #fff;
+            padding: 100px 20px;
+            text-align: center;
+        }
+        .container { max-width: 1000px; margin: 0 auto; padding: 40px 20px; }
+        h1 { font-size: 3.5rem; margin-bottom: 10px; color: var(--primary); }
+        .tagline { font-size: 1.5rem; opacity: 0.9; margin-bottom: 30px; }
+        
+        .section { margin-bottom: 60px; }
+        .section h2 { font-size: 2rem; margin-bottom: 20px; border-left: 5px solid var(--primary); padding-left: 15px; }
+        
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
+        .card { background: #fff; padding: 30px; border-radius: 15px; shadow: 0 4px 6px rgba(0,0,0,0.1); border-bottom: 4px solid var(--primary); }
+        .card h3 { margin-bottom: 15px; color: var(--dark); }
+        
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; text-align: center; }
+        .stat-item { padding: 20px; }
+        .stat-number { font-size: 2.5rem; font-weight: bold; color: var(--primary); display: block; }
+        .stat-label { font-size: 1rem; color: #666; text-transform: uppercase; }
+
+        .cta-box { background: var(--dark); color: #fff; padding: 50px; border-radius: 20px; text-align: center; }
+        .email-link { color: var(--primary); font-size: 1.8rem; text-decoration: none; font-weight: bold; }
+        .email-link:hover { text-decoration: underline; }
+
+        footer { text-align: center; padding: 40px; font-size: 0.9rem; color: #888; }
+        
+        @media (max-width: 600px) {
+            h1 { font-size: 2.5rem; }
+            .tagline { font-size: 1.2rem; }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>SmartGorshok</h1>
+    <p class="tagline">Твои растения больше не погибнут. Никогда.</p>
+</header>
+
+<div class="container">
+    <section class="section">
+        <h2>О проекте</h2>
+        <p>SmartGorshok — это умная экосистема для дома и офиса. Мы создали автономный модуль, который контролирует полив, освещение и микроклимат без вашего участия. Идеально для тех, кто часто бывает в командировках или просто забывает полить свой любимый фикус.</p>
+    </section>
+
+    <section class="section">
+        <h2>Что внутри?</h2>
+        <div class="grid">
+            <div class="card">
+                <h3>Умный полив</h3>
+                <p>Интеллектуальное управление насосом на основе реальной влажности почвы. Никакого перелива.</p>
+            </div>
+            <div class="card">
+                <h3>UV-Контроль</h3>
+                <p>Адаптивное освещение, которое подстраивается под тип вашего растения.</p>
+            </div>
+            <div class="card">
+                <h3>Wi-Fi Мониторинг</h3>
+                <p>Следите за состоянием цветов через смартфон из любой точки мира.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="section">
+        <h2>Бизнес-метрики</h2>
+        <div class="stats-grid">
+            <div class="stat-item">
+                <span class="stat-number">43%</span>
+                <span class="stat-label">Рентабельность</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-number">12 000 ₽</span>
+                <span class="stat-label">Цена устройства</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-number">17.8 Млн ₽</span>
+                <span class="stat-label">Выручка (прогноз год)</span>
+            </div>
+        </div>
+    </section>
+
+    <section class="section cta-box">
+        <h2 style="color: #fff; border: none; text-align: center;">Связаться с нами</h2>
+        <p style="margin-bottom: 20px;">По вопросам сотрудничества и инвестиций пишите на почту:</p>
+        <a href="mailto:smartgorshok@gmail.com" class="email-link">smartgorshok@gmail.com</a>
+    </section>
+</div>
+
+<footer>
+    &copy; 2024 SmartGorshok Project. Работает на GitHub Pages.
+</footer>
+
+</body>
+</html>
