@@ -21,21 +21,22 @@
       --container-width: 1200px;
     }
 
-    /* --- УБИРАЕМ СИНЕЕ ВЫДЕЛЕНИЕ --- */
+    /* --- УБИРАЕМ СИНЕЕ ВЫДЕЛЕНИЕ И ДОБАВЛЯЕМ ПЛАВНОСТЬ --- */
     * { 
       box-sizing: border-box; 
       margin: 0; 
       padding: 0; 
-      -webkit-tap-highlight-color: transparent; /* Убирает синий квадрат на iOS/Android */
+      -webkit-tap-highlight-color: transparent; 
     }
 
-    /* --- АНИМАЦИЯ НАЖАТИЯ --- */
+    /* --- АНИМАЦИЯ НАЖАТИЯ (УМЕНЬШЕНИЕ) --- */
     .sg-card, .stat-card, .email-btn {
-      transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1), background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+      transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1), background 0.3s ease, border-color 0.3s ease;
+      cursor: pointer;
     }
 
     .tap-active {
-      transform: scale(0.96) !important; /* Плавное уменьшение */
+      transform: scale(0.96) !important;
     }
 
     @keyframes shimmer {
@@ -139,8 +140,7 @@
       gap: 20px;
     }
 
-    .sg-card, .stat-card {
-      cursor: pointer;
+    .sg-card {
       background: var(--bg-card);
       border: 1px solid var(--border-color);
       border-radius: 24px;
@@ -169,14 +169,11 @@
     }
 
     .stat-card {
+      background: var(--bg-card);
       border-radius: 20px;
       padding: 30px;
       text-align: center;
-    }
-
-    .stat-card:hover {
-      border-color: var(--accent-green);
-      background: var(--bg-elevated);
+      border: 1px solid var(--border-color);
     }
 
     .stat-number {
@@ -257,8 +254,6 @@
       cursor: pointer;
       padding: 5px;
     }
-
-    .close-modal:hover { color: var(--accent-green); }
 
     .modal-body h2 {
       margin-bottom: 20px;
@@ -369,18 +364,16 @@
 <script>
   lucide.createIcons();
 
-  // Логика печати
+  // ПЕЧАТНАЯ МАШИНКА
   async function typeWriter(el, speed) {
     const text = el.getAttribute('data-text');
     el.innerText = '';
     el.style.visibility = 'visible';
     el.classList.add('typing-cursor');
-    
     for (let i = 0; i < text.length; i++) {
       el.innerText += text.charAt(i);
       await new Promise(res => setTimeout(res, speed));
     }
-    
     setTimeout(() => el.classList.remove('typing-cursor'), 1000);
   }
 
@@ -392,6 +385,7 @@
     await typeWriter(tagline, 35);
   });
 
+  // ДАННЫЕ МОДАЛОК
   const modalData = {
     'irrigation': {
       title: 'Smart Irrigation System',
@@ -406,7 +400,7 @@
     'mobile': {
       title: 'Mobile App & Notifications',
       content: 'Собственное кроссплатформенное приложение для iOS и Android. Позволяет управлять растением из любой точки мира.',
-      details: '<ul><li>Мониторинг всех датчиков (влажность, свет, температура) в реальном времени</li><li>Настраиваемые Push-уведомления: "Нужен полив", "Низкий уровень воды"</li><li>Графики роста и история показателей</li></ul>'
+      details: '<ul><li>Мониторинг всех датчиков в реальном времени</li><li>Настраиваемые Push-уведомления: "Нужен полив", "Низкий уровень воды"</li><li>Графики роста и история показателей</li></ul>'
     },
     'roi': {
       title: 'Расчет окупаемости (ROI)',
@@ -445,23 +439,46 @@
     document.body.classList.remove('modal-open');
   }
 
-  // --- ОБРАБОТКА ТАПОВ (УМЕНЬШЕНИЕ) ---
+  // --- ЛОГИКА ТАПОВ С ЗАЩИТОЙ ОТ СКРОЛЛА ---
   const clickables = document.querySelectorAll('.sg-card, .stat-card, .email-btn');
+  let startX, startY, isMoving;
 
   clickables.forEach(el => {
-    // Начало нажатия
-    const startEffect = () => el.classList.add('tap-active');
-    // Конец нажатия
-    const endEffect = () => {
-      el.classList.remove('tap-active');
-      const modalId = el.getAttribute('data-modal');
-      if (modalId) openModal(modalId);
-    };
+    // Тач события
+    el.addEventListener('touchstart', (e) => {
+      isMoving = false;
+      startX = e.touches[0].pageX;
+      startY = e.touches[0].pageY;
+      el.classList.add('tap-active');
+    }, {passive: true});
 
-    el.addEventListener('touchstart', startEffect, {passive: true});
-    el.addEventListener('touchend', endEffect);
-    el.addEventListener('mousedown', startEffect);
-    el.addEventListener('mouseup', endEffect);
+    el.addEventListener('touchmove', (e) => {
+      const diffX = Math.abs(e.touches[0].pageX - startX);
+      const diffY = Math.abs(e.touches[0].pageY - startY);
+      if (diffX > 10 || diffY > 10) {
+        isMoving = true;
+        el.classList.remove('tap-active');
+      }
+    }, {passive: true});
+
+    el.addEventListener('touchend', (e) => {
+      el.classList.remove('tap-active');
+      if (!isMoving) {
+        const modalId = el.getAttribute('data-modal');
+        if (modalId) openModal(modalId);
+      }
+    });
+
+    // Мышь события (десктоп)
+    el.addEventListener('mousedown', () => el.classList.add('tap-active'));
+    el.addEventListener('mouseup', (e) => {
+      el.classList.remove('tap-active');
+      // Только если это не тач-событие (чтобы не дублировать)
+      if (e.detail !== 0) { 
+        const modalId = el.getAttribute('data-modal');
+        if (modalId) openModal(modalId);
+      }
+    });
     el.addEventListener('mouseleave', () => el.classList.remove('tap-active'));
   });
 
